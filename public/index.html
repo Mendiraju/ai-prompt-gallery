@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">✨</div>
+                <h1>AI Prompt <span class="gallery-text">Gallery</span></h1>
+            </div>
+            <p class="subtitle">Discover and copy amazing AI prompts for generating stunning images. Browse by category and find inspiration for your next creation with real-time updates.</p>
+            
+            <div class="stats">
+                <div class="stats-item">
+                    <span class="stats-icon">📊</span>
+                    <span id="prompt-count">0</span>
+                    <span>Prompts Available</span>
+                </div>
+                <div class="stats-item">
+                    <span class="live-indicator"></span>
+                    <span>Live Updates</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Category Filters -->
+        <div class="filters">
+            <button class="filter-btn active" data-category="All">
+                All Prompts
+                <span class="count">0</span>
+            </button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-info">
+            <span>Showing <span id="showing-count">0</span> prompts</span>
+        </div>
+
+        <div class="gallery" id="gallery">
+            <!-- Prompt cards will be dynamically loaded here -->
+        </div>
+
+        <!-- Loading indicator -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+            <p>Loading prompts...</p>
+        </div>
+
+        <!-- Empty state -->
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="empty-icon">📝</div>
+            <h3>No prompts found</h3>
+            <p>No prompts match your current filter. Try selecting a different category.</p>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <span id="toast-message">Prompt copied to clipboard!</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
