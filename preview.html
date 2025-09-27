@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Gallery - Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Header styles */
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.gallery-text {
+    color: #333;
+    background: linear-gradient(45deg, #333, #555);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    font-weight: 400;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.stats-icon {
+    font-size: 1.2rem;
+}
+
+.live-indicator {
+    width: 8px;
+    height: 8px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Filter styles */
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.filter-btn.active {
+    background: white;
+    color: #333;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.filter-btn .count {
+    background: rgba(102, 126, 234, 0.2);
+    color: inherit;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.filter-btn.active .count {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+/* Gallery info */
+.gallery-info {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Gallery grid */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Prompt card */
+.prompt-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.prompt-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-category {
+    background: #667eea;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.card-prompt {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.copy-btn {
+    width: 100%;
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.copy-btn:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+.copy-btn.copied {
+    background: #48bb78;
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #48bb78;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    font-weight: 500;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .stats {
+        gap: 2rem;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .gallery {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .filters {
+        gap: 0.5rem;
+    }
+    
+    .filter-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .logo-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card-content {
+        padding: 1rem;
+    }
+    
+    .stats {
+        gap: 1rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">✨</div>
+                <h1>AI Prompt <span class="gallery-text">Gallery</span></h1>
+            </div>
+            <p class="subtitle">Discover and copy amazing AI prompts for generating stunning images. Browse by category and find inspiration for your next creation with real-time updates.</p>
+            
+            <div class="stats">
+                <div class="stats-item">
+                    <span class="stats-icon">📊</span>
+                    <span id="prompt-count">4</span>
+                    <span>Prompts Available</span>
+                </div>
+                <div class="stats-item">
+                    <span class="live-indicator"></span>
+                    <span>Live Updates</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Category Filters -->
+        <div class="filters">
+            <button class="filter-btn active">
+                All Prompts
+                <span class="count">4</span>
+            </button>
+            <button class="filter-btn">
+                Men
+                <span class="count">1</span>
+            </button>
+            <button class="filter-btn">
+                Women
+                <span class="count">1</span>
+            </button>
+            <button class="filter-btn">
+                Couple
+                <span class="count">1</span>
+            </button>
+            <button class="filter-btn">
+                Kids
+                <span class="count">1</span>
+            </button>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-info">
+            <span>Showing <span id="showing-count">4</span> prompts</span>
+        </div>
+
+        <div class="gallery" id="gallery">
+            <!-- Sample prompt cards -->
+            <div class="prompt-card">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face" 
+                     alt="Professional man" class="card-image">
+                <div class="card-content">
+                    <div class="card-category">Men</div>
+                    <p class="card-prompt">Professional portrait of a confident business person in modern office setting, wearing a tailored navy suit, crisp lighting, contemporary style, photorealistic</p>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'Professional portrait of a confident business person in modern office setting, wearing a tailored navy suit, crisp lighting, contemporary style, photorealistic')">
+                        📋 Copy Prompt
+                    </button>
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b1dd?w=400&h=400&fit=crop&crop=face" 
+                     alt="Professional woman" class="card-image">
+                <div class="card-content">
+                    <div class="card-category">Women</div>
+                    <p class="card-prompt">Elegant professional woman in modern urban setting, sophisticated casual attire, warm natural lighting, confident expression, lifestyle portrait</p>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'Elegant professional woman in modern urban setting, sophisticated casual attire, warm natural lighting, confident expression, lifestyle portrait')">
+                        📋 Copy Prompt
+                    </button>
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&h=400&fit=crop" 
+                     alt="Happy couple" class="card-image">
+                <div class="card-content">
+                    <div class="card-category">Couple</div>
+                    <p class="card-prompt">Happy couple walking together in modern urban setting, stylish casual attire, warm natural lighting, candid lifestyle moment, photorealistic</p>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'Happy couple walking together in modern urban setting, stylish casual attire, warm natural lighting, candid lifestyle moment, photorealistic')">
+                        📋 Copy Prompt
+                    </button>
+                </div>
+            </div>
+
+            <div class="prompt-card">
+                <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=400&fit=crop&crop=face" 
+                     alt="Cheerful child" class="card-image">
+                <div class="card-content">
+                    <div class="card-category">Kids</div>
+                    <p class="card-prompt">Cheerful children playing in modern playground, bright colorful clothing, soft natural lighting, joyful expressions, outdoor lifestyle photography</p>
+                    <button class="copy-btn" onclick="copyPrompt(this, 'Cheerful children playing in modern playground, bright colorful clothing, soft natural lighting, joyful expressions, outdoor lifestyle photography')">
+                        📋 Copy Prompt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <span id="toast-message">Prompt copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Copy prompt functionality
+        async function copyPrompt(button, text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                
+                // Update button state
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.classList.add('copied');
+                
+                // Show toast
+                showToast('Prompt copied to clipboard!');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Failed to copy:', error);
+                showToast('Copy failed. Please try again.');
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Filter functionality (preview only)
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                showToast('Filter functionality works in full version!');
+            });
+        });
+    </script>
+</body>
+</html>
